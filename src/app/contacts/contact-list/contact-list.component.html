@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="row">
+            <strong class="title pad-left-right">Contacts</strong>
+          </div>
+          <div class="row">
+            <div class="pull-right pad-left-right">
+              <a class="btn btn-success">New Contact</a>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        <div class="panel-body">
+            <div class="container">
+                <div class="row" *ngFor="let contact of contacts">
+                    <div class="col-xs-3">
+                       {{contact.name}}
+                    </div>
+                    <div class="col-xs-4">
+                        {{contact.imageUrl}}
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
