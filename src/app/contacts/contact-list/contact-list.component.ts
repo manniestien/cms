@@ -16,7 +16,7 @@ email: "jacksonk@byui.edu",
 
 phone: "208-496-3771",
 
-imageUrl: "https://web.byui.edu/Directory/Employee/jacksonk.jpg",
+imageUrl: "src\assets\images\jacksonk.jpg",
 
 group: null},
 
@@ -28,7 +28,7 @@ email: "barzeer@byui.edu",
 
 phone: "208-496-3768",
 
-imageUrl: "https://web.byui.edu/Directory/Employee/barzeer.jpg",
+imageUrl: "src\assets\images\barzeer.jpg",
 
 group: null
   }];
