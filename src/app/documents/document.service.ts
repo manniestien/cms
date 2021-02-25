@@ -63,6 +63,7 @@ addDocument (newDoc: Document) {
   this.maxDocumentID++;
   newDoc.id = this.maxDocumentID.toString();
   this.documents.push(newDoc);
+  this.documentChangedEvent.next(this.documents.slice());
  }
 
  updateDocument(originalDoc: Document, newDoc: Document) {
@@ -76,5 +77,6 @@ addDocument (newDoc: Document) {
 
   newDoc.id = originalDoc.id;
   this.documents[pos] = newDoc;
+  this.documentListChangedEvent.next([...this.documents]);
  }
 }

@@ -26,7 +26,9 @@ export class DocumentListComponent implements OnInit {
       .subscribe((documentList: Document[]) => {
         this.documents = documentList;
       });
+      console.log(this.documents);
   }
+
 
   ngOnDestroy() {
     this.subscription.unsubscribe();

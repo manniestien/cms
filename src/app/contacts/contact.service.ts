@@ -58,6 +58,7 @@ addContact (newContact: Contact) {
   this.maxContactID++;
   newContact.id = this.maxContactID.toString();
   this.contacts.push(newContact);
+  this.contactChangedEvent.next(this.contacts.slice());
 
  }
 
@@ -72,6 +73,7 @@ addContact (newContact: Contact) {
 
   newDoc.id = originalContact.id;
   this.contacts[pos] = newDoc;
+  this.contactListChangedEvent.next([...this.contacts]);
  }
 }
 
