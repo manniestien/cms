@@ -10,7 +10,8 @@ import { ContactService } from '../contact.service';
 })
 export class ContactListComponent implements OnInit {
   contacts: Contact[] = [];
-  private subscription: Subscription;
+  subscription: Subscription;
+  term: string;
 
   constructor(private contactService: ContactService) { }
 
@@ -26,9 +27,15 @@ export class ContactListComponent implements OnInit {
     });
 
   }
-
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+  search(value: string) {
+    this.term = value;
+    }
+
+  onKeyPress(value: string) {
+    this.term = value;
   }
 
 }

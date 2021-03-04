@@ -1,31 +1,43 @@
 import { EventEmitter, Injectable } from '@angular/core';
-import { from } from 'rxjs';
-import { MOCKCONTACTS } from '../contacts/MOCKCONTACTS';
 import { Document } from './document.model';
-import { MOCKDOCUMENTS } from './MOCKDOCUMENTS'
 import { Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class DocumentService {
-  documents: Document[] = [];
+  documents = [];
   documentSelectedEvent: EventEmitter<Document> = new EventEmitter<Document>();
   documentChangedEvent: EventEmitter<Document[]> = new EventEmitter<Document[]>();
   documentListChangedEvent: Subject<Document[]> = new Subject<Document[]>();
   maxDocumentID: number;
 
-  constructor() {
-    this.documents = MOCKDOCUMENTS;
+  constructor(private http: HttpClient) {
     this.maxDocumentID = this.getMaxID();
    }
 
-   getDocuments(): Document[] {
-    return this.documents
-    .sort((a, b) => a.name > b.name ? 1 : b.name > a.name ? -1 : 0)
-    .slice();
-  }
+   getDocuments() {
+    return this.http.get('https://cms-app-fcd7c-default-rtdb.firebaseio.com/documents.json')
+    .subscribe((documents: Document[]) => {
+        this.documents = documents;
+        this.maxDocumentID = this.getMaxID();
+        this.documentListChangedEvent.next([...this.documents]);
+      }, (err: any) => {
+        console.error(err);
+        return [...this.documents]
+       });
+
+   }
+
+   storeDocuments() {
+    const docs = JSON.stringify(this.documents);
+    this.http.put('https://cms-app-fcd7c-default-rtdb.firebaseio.com/documents.json', docs)
+    .subscribe(() => {
+        this.documentListChangedEvent.next([...this.documents]);
+    });
+}
 
   getDocument(id: string): Document {
     return this.documents.find((document) => document.id === id);
@@ -40,8 +52,7 @@ export class DocumentService {
        return;
     }
     this.documents.splice(pos, 1);
-    this.documentChangedEvent.emit(this.documents.slice());
- }
+    this.storeDocuments(); }
 
 
  getMaxID(): number {
@@ -63,8 +74,7 @@ addDocument (newDoc: Document) {
   this.maxDocumentID++;
   newDoc.id = this.maxDocumentID.toString();
   this.documents.push(newDoc);
-  this.documentChangedEvent.next(this.documents.slice());
- }
+  this.storeDocuments(); }
 
  updateDocument(originalDoc: Document, newDoc: Document) {
   if (originalDoc === null || originalDoc === undefined || newDoc === null || newDoc === undefined) {
@@ -77,6 +87,5 @@ addDocument (newDoc: Document) {
 
   newDoc.id = originalDoc.id;
   this.documents[pos] = newDoc;
-  this.documentListChangedEvent.next([...this.documents]);
- }
+  this.storeDocuments(); }
 }
